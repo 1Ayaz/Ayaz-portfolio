@@ -99,9 +99,9 @@
             height: auto;
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            /* Adds a slight border to distinguish the paper from the dark background */
             border: 1px solid rgba(255, 255, 255, 0.1); 
-            background-color: white; /* Ensure white background for the PDF paper */
+            background-color: white;
+            display: block;
         }
         
         .loading {
@@ -111,6 +111,27 @@
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .resume-nav {
+                padding: 12px 16px;
+            }
+
+            .back-btn {
+                font-size: 0.85rem;
+            }
+
+            .download-btn {
+                padding: 8px 14px;
+                font-size: 0.85rem;
+            }
+
+            .pdf-container {
+                margin-top: 70px;
+                padding: 0 8px;
+                gap: 12px;
+            }
         }
 
     </style>
@@ -165,26 +186,31 @@
                 pdf.getPage(pageNum).then(function(page) {
                     console.log('Page ' + pageNum + ' loaded');
                     
-                    // Set scale to make sure it looks sharp (2.0 is usually good for retina displays)
-                    // You might need to adjust this depending on the default size of your PDF
-                    let scale = 1.6; 
+                    // Use devicePixelRatio for crisp rendering on all screens
+                    const dpr = window.devicePixelRatio || 1;
+                    const baseViewport = page.getViewport({scale: 1.0});
                     
-                    // Check window width to adjust scale for mobile
-                    if (window.innerWidth < 768) {
-                        scale = window.innerWidth / page.getViewport({scale: 1.0}).width;
-                    }
+                    // Calculate a scale that fits the container width
+                    const containerWidth = pdfContainer.clientWidth || window.innerWidth - 16;
+                    const fitScale = containerWidth / baseViewport.width;
+                    
+                    // Use a minimum scale of 2.0 for desktop sharpness, or fitScale * dpr for mobile
+                    const renderScale = Math.max(fitScale * dpr, 2.0);
 
-                    const viewport = page.getViewport({scale: scale});
+                    const viewport = page.getViewport({scale: renderScale});
 
-                    // Prepare canvas using PDF page dimensions
-                    canvas.height = viewport.height;
+                    // Set canvas internal resolution to the high-res render
                     canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+                    
+                    // Scale canvas display size down to fit the screen (CSS pixels)
+                    canvas.style.width = (viewport.width / dpr) + 'px';
+                    canvas.style.height = (viewport.height / dpr) + 'px';
 
-                    // Render PDF page into canvas context
                     const renderContext = {
                         canvasContext: ctx,
                         viewport: viewport,
-                        background: 'white' // Force white background
+                        background: 'white'
                     };
                     
                     const renderTask = page.render(renderContext);
