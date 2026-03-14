@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mohammad Ayaz — Resume">
+    <title>Resume - {AYAZ}</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons (Phosphor Icons for sleek modern look) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- PDF.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color, #0f1624); /* Fallback if style.css doesn't load var */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--text-color, #fff);
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Simple Navigation for Resume Page */
+        .resume-nav {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 22, 36, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-sizing: border-box;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-color, #fff);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .back-btn:hover {
+            color: var(--accent, #64ffda);
+        }
+
+        .download-btn {
+            background-color: var(--accent, #64ffda);
+            color: #0f1624;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+        }
+
+        /* PDF Viewer Container */
+        .pdf-container {
+            margin-top: 100px; /* Space for navbar */
+            margin-bottom: 40px;
+            width: 100%;
+            max-width: 900px; /* Max width for readability */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* The canvas where PDF pages are rendered */
+        canvas {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            /* Adds a slight border to distinguish the paper from the dark background */
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            background-color: white; /* Ensure white background for the PDF paper */
+        }
+        
+        .loading {
+            margin-top: 150px;
+            font-size: 1.2rem;
+            color: var(--accent, #64ffda);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="resume-nav">
+        <a href="index.html" class="back-btn"><i class="ph ph-arrow-left"></i> Back to Portfolio</a>
+        <a href="Ayaz_resume_march.pdf" download="Mohammad_Ayaz_Resume.pdf" class="download-btn"><i class="ph ph-download-simple"></i> Download PDF</a>
+    </nav>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="loading">
+        <i class="ph ph-spinner ph-spin"></i> Loading Resume...
+    </div>
+
+    <!-- PDF Container -->
+    <div id="pdf-container" class="pdf-container">
+        <!-- Canvases will be injected here by JS -->
+    </div>
+
+    <script>
+        // Use PDF.js to render the PDF onto the canvas
+        // This completely bypasses the browser's default PDF viewer (no print/drive UI)
+
+        // URL to your PDF file
+        const url = 'Ayaz_resume_march.pdf';
+
+        // Initialize PDF.js worker
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+        const loadingIndicator = document.getElementById('loading');
+        const pdfContainer = document.getElementById('pdf-container');
+
+        // Asynchronous download of PDF
+        const loadingTask = pdfjsLib.getDocument(url);
+        
+        loadingTask.promise.then(function(pdf) {
+            console.log('PDF loaded');
+            loadingIndicator.style.display = 'none';
+
+            // Loop through all pages of the PDF
+            for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                
+                // Create a canvas for each page
+                const canvas = document.createElement('canvas');
+                pdfContainer.appendChild(canvas);
+                const ctx = canvas.getContext('2d');
+
+                // Render the page
+                pdf.getPage(pageNum).then(function(page) {
+                    console.log('Page ' + pageNum + ' loaded');
+                    
+                    // Set scale to make sure it looks sharp (2.0 is usually good for retina displays)
+                    // You might need to adjust this depending on the default size of your PDF
+                    let scale = 1.6; 
+                    
+                    // Check window width to adjust scale for mobile
+                    if (window.innerWidth < 768) {
+                        scale = window.innerWidth / page.getViewport({scale: 1.0}).width;
+                    }
+
+                    const viewport = page.getViewport({scale: scale});
+
+                    // Prepare canvas using PDF page dimensions
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+
+                    // Render PDF page into canvas context
+                    const renderContext = {
+                        canvasContext: ctx,
+                        viewport: viewport,
+                        background: 'white' // Force white background
+                    };
+                    
+                    const renderTask = page.render(renderContext);
+                    renderTask.promise.then(function () {
+                        console.log('Page ' + pageNum + ' rendered');
+                    });
+                });
+            }
+        }, function (reason) {
+            // PDF loading error
+            console.error('Error loading PDF:', reason);
+            loadingIndicator.innerHTML = '<i class="ph ph-warning"></i> Error loading resume. Please try downloading it instead.';
+            loadingIndicator.style.color = '#ff6b6b';
+        });
+    </script>
+</body>
+</html>
