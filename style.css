@@ -7,7 +7,7 @@
     --bg-main: #1b1a2ea3;       /* Deep space transparent for particles */
     --bg-solid: #1b1a2e;        /* Deep space solid */
     --bg-darker: #131221;       /* Darker shade for sections */
-    --accent: #c770f0;          /* Arafath's Signature Purple */
+    --accent: #c770f0;          /* Signature Purple */
     --accent-glow: rgba(199, 112, 240, 0.4);
     --text-primary: #ffffff;
     --text-secondary: #a3a3a3;
@@ -292,8 +292,27 @@ h1, h2, h3 {
 .hero-desc {
     font-size: 1.1rem;
     color: var(--text-secondary);
-    margin-bottom: 2.5rem;
+    margin-bottom: 1.5rem;
     max-width: 500px;
+}
+
+/* Hero Social Icons */
+.hero-socials {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.hero-socials a {
+    font-size: 1.8rem;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.hero-socials a:hover {
+    color: var(--accent);
+    transform: translateY(-3px);
 }
 
 /* Buttons */
@@ -302,7 +321,7 @@ h1, h2, h3 {
     align-items: center;
     gap: 0.5rem;
     padding: 0.8rem 1.8rem;
-    border-radius: 4px; /* Slightly sharp like Arafath's */
+    border-radius: 4px;
     font-weight: 600;
     font-size: 1rem;
     cursor: pointer;
@@ -577,12 +596,15 @@ h1, h2, h3 {
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    text-align: center;
 }
 
 .footer-socials {
     display: flex;
     gap: 1.5rem;
     margin-top: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .footer-socials a i {
@@ -595,7 +617,11 @@ h1, h2, h3 {
     transform: translateY(-3px);
 }
 
-/* Responsive Design */
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+/* Tablet breakpoint */
 @media (max-width: 968px) {
     .hero-split {
         flex-direction: column;
@@ -608,11 +634,16 @@ h1, h2, h3 {
     }
     
     .hero-desc {
-        margin: 0 auto 2.5rem;
+        margin: 0 auto 1.5rem;
+    }
+
+    .hero-socials {
+        justify-content: center;
     }
 
     .about-grid {
         grid-template-columns: 1fr;
+        gap: 2rem;
     }
     
     .about-image {
@@ -624,9 +655,29 @@ h1, h2, h3 {
     }
 }
 
+/* Mobile breakpoint */
 @media (max-width: 768px) {
     .nav-toggle {
         display: block;
+    }
+
+    .section {
+        padding: 60px 0;
+    }
+    
+    .container {
+        padding: 0 1.2rem;
+    }
+    
+    .section-title {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+    }
+
+    .section-subtitle {
+        font-size: 0.95rem;
+        margin-top: -1rem;
+        margin-bottom: 2rem;
     }
 
     .nav-links {
@@ -654,10 +705,175 @@ h1, h2, h3 {
     }
 
     .hero-name {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+    }
+
+    .hero-greeting {
+        font-size: 1.6rem;
+    }
+
+    .typewriter-container {
+        font-size: 1.4rem;
+        height: 32px;
+    }
+
+    .hero-desc {
+        font-size: 0.95rem;
+    }
+
+    .hero-socials {
+        gap: 1.2rem;
+        justify-content: center;
+    }
+
+    .hero-socials a {
+        font-size: 1.5rem;
+    }
+
+    .hero-image {
+        max-width: 280px;
+        margin: 0 auto;
+    }
+
+    .about-text {
+        padding: 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .tilt-img {
+        max-width: 220px;
+    }
+
+    .skills-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.8rem;
     }
     
+    .tools-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .skill-card {
+        padding: 1.2rem 0.5rem;
+        gap: 0.6rem;
+    }
+
+    .skill-card i {
+        font-size: 2.8rem;
+    }
+
+    .skill-card span {
+        font-size: 0.85rem;
+    }
+
     .projects-grid {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .project-img-wrapper {
+        height: 180px;
+    }
+
+    .project-content {
+        padding: 1.2rem;
+    }
+
+    .project-content h3 {
+        font-size: 1.2rem;
+    }
+
+    .project-content p {
+        font-size: 0.88rem;
+        margin-bottom: 1rem;
+    }
+
+    .project-links .btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .certs-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .cert-card {
+        padding: 1.2rem;
+        gap: 1rem;
+    }
+
+    .cert-card i {
+        font-size: 2rem;
+    }
+
+    .cert-info h4 {
+        font-size: 0.95rem;
+    }
+
+    .cert-info p {
+        font-size: 0.8rem;
+    }
+
+    .resume-embed {
+        padding: 0.8rem;
+    }
+
+    .resume-embed iframe {
+        min-height: 350px;
+    }
+
+    .resume-actions .btn {
+        font-size: 0.9rem;
+        padding: 0.6rem 1.4rem;
+    }
+
+    .footer h3 {
+        font-size: 1.1rem;
+    }
+
+    .footer p {
+        font-size: 0.9rem;
+    }
+
+    .footer-socials {
+        gap: 1rem;
+    }
+
+    .footer-socials a i {
+        font-size: 1.5rem;
+    }
+}
+
+/* Small phone breakpoint */
+@media (max-width: 400px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .hero-name {
+        font-size: 1.8rem;
+    }
+
+    .hero-greeting {
+        font-size: 1.3rem;
+    }
+
+    .typewriter-container {
+        font-size: 1.1rem;
+        height: 28px;
+    }
+
+    .skills-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .tools-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
     }
 }

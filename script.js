@@ -7,11 +7,13 @@ window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
     } else {
-        navbar.classList.add('scrolled'); // Force glass on all states for consistency with theme
+        navbar.classList.remove('scrolled');
     }
 });
 // Trigger once on load
-navbar.classList.add('scrolled');
+if (window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+}
 
 // --- Mobile Navigation Toggle ---
 navToggle.addEventListener('click', () => {
