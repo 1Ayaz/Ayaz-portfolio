@@ -43,6 +43,7 @@ document.querySelectorAll('.nav-links a').forEach(link => {
 const typewriterText = document.getElementById('typewriter');
 const words = [
     'Backend Developer',
+    'Full Stack Developer',
     'DevOps Developer',
     'Web Designer',
     'Computer Science Student'
